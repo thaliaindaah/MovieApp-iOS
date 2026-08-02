@@ -67,7 +67,7 @@ struct ReviewCollectionView: View {
             HStack {
                 Image(systemName: "star.fill")
                     .foregroundStyle(.yellow)
-                Text("\(review.authorDetails.rating ?? 0)")
+                Text("\(String(format: "%.1f", review.author_details.rating ?? 0))")
             }
             Text(review.content)
                 .font(.subheadline)
