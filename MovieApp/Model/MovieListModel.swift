@@ -12,8 +12,8 @@ struct MovieListModel : Identifiable, Codable {
     let title: String
     let release_date: String
     let overview: String
-    let poster_path: String
-    let backdrop_path: String
+    let poster_path: String?
+    let backdrop_path: String?
     let vote_average: Double
     let vote_count: Int
     let genre_ids: [Int]
@@ -33,11 +33,11 @@ struct MovieListResponse: Codable {
 
 extension MovieListModel {
     var posterPath: URL? {
-        guard let url = URL(string: "https://image.tmdb.org/t/p/w500\(poster_path)") else { return nil }
+        guard let url = URL(string: "https://image.tmdb.org/t/p/w500\(poster_path ?? "")") else { return nil }
         return url
     }
     var backdropPath: URL? {
-        guard let url = URL(string: "https://image.tmdb.org/t/p/original\(backdrop_path)") else { return nil }
+        guard let url = URL(string: "https://image.tmdb.org/t/p/original\(backdrop_path ?? "")") else { return nil }
         return url
     }
 }
