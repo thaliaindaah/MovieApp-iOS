@@ -13,7 +13,7 @@ struct MovieDetailModel: Identifiable, Codable {
     let release_date: String
     let overview: String
     let poster_path: String
-    let backdrop_path: String
+    let backdrop_path: String?
     let vote_average: Double
     let vote_count: Int
     let genres: [GenreModel]
@@ -29,7 +29,7 @@ struct MovieDetailModel: Identifiable, Codable {
 struct ProductionCompany: Identifiable, Codable {
     let id: Int
     let name: String
-    let logo_path: String
+    let logo_path: String?
     let origin_country: String
 }
 
@@ -39,7 +39,7 @@ extension MovieDetailModel {
         return url
     }
     var backdropPath: URL? {
-        guard let url = URL(string: "https://image.tmdb.org/t/p/original\(backdrop_path)") else { return nil }
+        guard let url = URL(string: "https://image.tmdb.org/t/p/original\(backdrop_path ?? "")") else { return nil }
         return url
     }
 }
