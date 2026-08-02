@@ -8,9 +8,9 @@
 import Foundation
 
 struct ReviewModel : Identifiable, Codable {
-    let id : Int
+    let id : String
     let author: String
-    let authorDetails: AuthorDetail
+    let author_details: AuthorDetail
     let created_at: String
     let updated_at: String
     let content: String
