@@ -8,7 +8,7 @@
 import Foundation
 
 struct VideoModel: Identifiable, Codable {
-    let id: Int
+    let id: String
     let key: String
     let name: String
     let site: String
