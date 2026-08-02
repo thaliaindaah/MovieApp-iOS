@@ -11,6 +11,7 @@ import SwiftUI
 final class GenrePresenter: ObservableObject {
     @Published var genres : [GenreModel] = []
     @Published var isLoading: Bool = false
+    @Published var errorMsg: String?
     let router: GenreRouterProtocol
     private let interactor: GenreInteractorProtocol
     private var cancellable: Set<AnyCancellable> = []
@@ -27,7 +28,7 @@ final class GenrePresenter: ObservableObject {
             .sink { [weak self] completion in
                 self?.isLoading = false
                 if case .failure(let error) = completion {
-                    print(error.localizedDescription)
+                    self?.errorMsg = error.localizedDescription
                 }
             } receiveValue: { [weak self] genres in
                 self?.genres = genres
