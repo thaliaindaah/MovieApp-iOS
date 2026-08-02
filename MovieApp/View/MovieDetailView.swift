@@ -53,7 +53,6 @@ struct MovieDetailView: View {
                                 Button {
                                     if let url = presenter.video?.youtubeURL {
                                         openURL(url)
-                                        print(url)
                                     } else {
                                         showNoTrailerAlert = true
                                     }
