@@ -26,12 +26,14 @@ final class GenrePresenter: ObservableObject {
         interactor.getGenres()
             .receive(on: DispatchQueue.main)
             .sink { [weak self] completion in
-                self?.isLoading = false
+                guard let self else { return }
+                self.isLoading = false
                 if case .failure(let error) = completion {
-                    self?.errorMsg = error.localizedDescription
+                    self.errorMsg = error.localizedDescription
                 }
             } receiveValue: { [weak self] genres in
-                self?.genres = genres
+                guard let self else { return }
+                self.genres = genres
             }
             .store(in: &cancellable)
     }
