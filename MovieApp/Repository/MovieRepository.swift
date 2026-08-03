@@ -10,10 +10,10 @@ import Combine
 
 protocol MovieRepositoryProtocol {
     func fetchGenres() -> AnyPublisher<[GenreModel], Error>
-    func fetchMovies(genreId: Int) -> AnyPublisher<[MovieListModel], Error>
+    func fetchMovies(page: Int, genreId: Int) -> AnyPublisher<MovieListResponse, Error>
     func fetchMoviesDetail(id: Int) -> AnyPublisher<MovieDetailModel, Error>
     func fetchVideo(movieId: Int) -> AnyPublisher<[VideoModel], Error>
-    func fetchReview(movieId: Int) -> AnyPublisher<[ReviewModel], Error>
+    func fetchReview(page: Int, movieId: Int) -> AnyPublisher<ReviewResponse, Error>
 }
 
 final class MovieRepository: MovieRepositoryProtocol {
@@ -34,16 +34,16 @@ final class MovieRepository: MovieRepositoryProtocol {
         .eraseToAnyPublisher()
     }
     
-    func fetchMovies(genreId: Int) -> AnyPublisher<[MovieListModel], any Error> {
+    func fetchMovies(page: Int, genreId: Int) -> AnyPublisher<MovieListResponse, any Error> {
         apiClient.request(
             "/discover/movie",
             parameters: [
                 "with_genres": genreId,
-                "page": 1
+                "page": page
             ]
         )
         .map { (response: MovieListResponse) in
-            response.results
+            response
         }
         .eraseToAnyPublisher()
     }
@@ -69,14 +69,15 @@ final class MovieRepository: MovieRepositoryProtocol {
         .eraseToAnyPublisher()
     }
     
-    func fetchReview(movieId: Int) -> AnyPublisher<[ReviewModel], any Error> {
+    func fetchReview(page: Int, movieId: Int) -> AnyPublisher<ReviewResponse, any Error> {
         apiClient.request(
             "/movie/\(movieId)/reviews",
             parameters: [
+                "page": page,
                 "language": "en-US"
             ]
         ).map { (response: ReviewResponse) in
-            response.results
+            response
         }
         .eraseToAnyPublisher()
     }
