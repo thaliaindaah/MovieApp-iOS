@@ -43,6 +43,13 @@ struct Review: View {
                     LazyVStack(spacing: 16) {
                         ForEach(presenter.review) { review in
                             ReviewCollectionView(review: review)
+                                .onAppear {
+                                    presenter.loadMoreReviews(reviews: review)
+                                }
+                        }
+                        if presenter.isLoadMore {
+                            ProgressView()
+                                .padding()
                         }
                     }
                 }
@@ -51,7 +58,9 @@ struct Review: View {
         }
         .navigationBarBackButtonHidden(true)
         .onAppear {
-            presenter.getReviews()
+            if presenter.review.isEmpty {
+                presenter.getReviews()
+            }
         }
     }
     
