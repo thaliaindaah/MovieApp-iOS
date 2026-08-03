@@ -8,10 +8,10 @@
 import Combine
 
 protocol MovieInteractorProtocol {
-    func fetchMovies(gendreId: Int) -> AnyPublisher<[MovieListModel], Error>
+    func fetchMovies(page: Int, gendreId: Int) -> AnyPublisher<MovieListResponse, Error>
     func fetchMoviesDetail(id: Int) -> AnyPublisher<MovieDetailModel, Error>
     func fetchVideoTrailer(movidId: Int) -> AnyPublisher<[VideoModel], Error>
-    func fetchReview(movidId: Int) -> AnyPublisher<[ReviewModel], Error>
+    func fetchReview(page: Int, movidId: Int) -> AnyPublisher<ReviewResponse, Error>
 }
 
 final class MovieInteractor: MovieInteractorProtocol {
@@ -21,8 +21,8 @@ final class MovieInteractor: MovieInteractorProtocol {
         self.repository = repository
     }
     
-    func fetchMovies(gendreId: Int) -> AnyPublisher<[MovieListModel], any Error> {
-        repository.fetchMovies(genreId: gendreId)
+    func fetchMovies(page: Int, gendreId: Int) -> AnyPublisher<MovieListResponse, any Error> {
+        repository.fetchMovies(page: page, genreId: gendreId)
     }
     
     func fetchMoviesDetail(id: Int) -> AnyPublisher<MovieDetailModel, any Error> {
@@ -33,8 +33,8 @@ final class MovieInteractor: MovieInteractorProtocol {
         repository.fetchVideo(movieId: movidId)
     }
     
-    func fetchReview(movidId: Int) -> AnyPublisher<[ReviewModel], any Error> {
-        repository.fetchReview(movieId: movidId)
+    func fetchReview(page: Int, movidId: Int) -> AnyPublisher<ReviewResponse, any Error> {
+        repository.fetchReview(page: page, movieId: movidId)
     }
 }
 
