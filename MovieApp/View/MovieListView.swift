@@ -49,6 +49,13 @@ struct MovieListView: View {
                                 MovieRow(movie: movie)
                             }
                             .buttonStyle(.plain)
+                            .onAppear {
+                                presenter.loadMoreMovie(movie: movie)
+                            }
+                        }
+                        if presenter.isLoadMore {
+                            ProgressView()
+                                .padding()
                         }
                     }
                 }
@@ -57,7 +64,9 @@ struct MovieListView: View {
         }
         .navigationBarBackButtonHidden(true)
         .onAppear {
-            presenter.getMovieLists()
+            if presenter.movieLists.isEmpty {
+                presenter.getMovieLists()
+            }
         }
     }
 }
