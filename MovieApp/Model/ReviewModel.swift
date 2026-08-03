@@ -18,6 +18,7 @@ struct ReviewModel : Identifiable, Codable {
 
 struct ReviewResponse: Codable {
     let page: Int
+    let total_pages: Int
     let results: [ReviewModel]
 }
 
