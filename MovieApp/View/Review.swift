@@ -12,23 +12,6 @@ struct Review: View {
     @StateObject var presenter: MovieDetailPresenter
     var body: some View {
         VStack {
-            ZStack {
-                Text("Reviews")
-                    .font(.title)
-                    .fontWeight(.bold)
-                HStack {
-                    Button {
-                        dismiss()
-                    } label: {
-                        Image(systemName: "chevron.left")
-                            .foregroundStyle(.black)
-                            .font(.title2)
-                    }
-                    
-                    Spacer()
-                }
-            }
-            .padding()
             if presenter.isLoading {
                 ProgressView().frame(maxWidth: .infinity, maxHeight: .infinity)
             } else if presenter.review.isEmpty {
@@ -56,15 +39,20 @@ struct Review: View {
                 .padding(.horizontal)
             }
         }
-        .navigationBarBackButtonHidden(true)
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .principal) {
+                Text("Reviews")
+                    .font(.title)
+                    .fontWeight(.bold)
+            }
+        }
         .onAppear {
             if presenter.review.isEmpty {
                 presenter.getReviews()
             }
         }
     }
-    
-    
 }
 
 struct ReviewCollectionView: View {
