@@ -69,6 +69,7 @@ struct Review: View {
 
 struct ReviewCollectionView: View {
     let review: ReviewModel
+    @State private var showMore: Bool = false
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             Text(review.author)
@@ -81,11 +82,14 @@ struct ReviewCollectionView: View {
             Text(review.content)
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
-                .lineLimit(4)
+                .lineLimit(showMore ? nil : 4)
         }
         .padding()
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(Color(.systemGray6))
         .clipShape(RoundedRectangle(cornerRadius: 16))
+        .onTapGesture {
+            !showMore ? showMore.toggle() : ()
+        }
     }
 }
