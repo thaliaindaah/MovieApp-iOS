@@ -14,13 +14,7 @@ struct GenreView: View {
         GridItem(.flexible())
     ]
     var body: some View {
-        
-        VStack(alignment: .leading) {
-            Text("Genres")
-                .font(.title)
-                .fontWeight(.bold)
-                .frame(maxWidth: .infinity)
-                .padding()
+        VStack {
             if presenter.isLoading {
                 ProgressView().frame(maxWidth: .infinity, maxHeight: .infinity)
             } else if presenter.genres.isEmpty {
@@ -48,6 +42,13 @@ struct GenreView: View {
             }
         }
         .navigationBarBackButtonHidden(true)
+        .toolbar {
+            ToolbarItem(placement: .principal) {
+                Text("Genres")
+                    .font(.title)
+                    .fontWeight(.bold)
+            }
+        }
         .onAppear {
             presenter.getGenres()
         }
