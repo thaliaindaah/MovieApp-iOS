@@ -15,6 +15,7 @@ final class MovieDetailPresenter: ObservableObject {
     @Published var errorMsg: String?
     @Published var video: VideoModel?
     @Published var review: [ReviewModel] = []
+    @Published var credit: MovieCredit?
         
     let movieId: Int
     let router : MovieRouter
@@ -28,6 +29,12 @@ final class MovieDetailPresenter: ObservableObject {
         self.movieId = id
         self.interactor = interactor
         self.router = router
+    }
+    
+    func loadMovieDetail() {
+        getMovieDetail()
+        getVideoTrailer()
+        getCast()
     }
     
     func getMovieDetail(){
@@ -62,6 +69,22 @@ final class MovieDetailPresenter: ObservableObject {
                 self.video = video.first {
                     $0.site == "YouTube" && $0.type == "Trailer"
                 }
+            }
+            .store(in: &cancellable)
+    }
+    
+    func getCast() {
+        interactor.fetchCast(movieId: movieId)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] completion in
+                guard let self else { return }
+                self.isLoading = false
+                if case .failure(let error) = completion {
+                    self.errorMsg = error.localizedDescription
+                }
+            } receiveValue: { [weak self] credit in
+                guard let self else { return }
+                self.credit = credit
             }
             .store(in: &cancellable)
     }
