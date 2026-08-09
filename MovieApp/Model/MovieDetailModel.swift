@@ -33,6 +33,18 @@ struct ProductionCompany: Identifiable, Codable {
     let origin_country: String
 }
 
+struct MovieCredit: Identifiable, Codable {
+    let id: Int
+    let cast: [MovieCast]
+}
+
+struct MovieCast: Identifiable, Codable {
+    let id: Int
+    let name: String
+    let character: String
+    let profile_path: String?
+}
+
 extension MovieDetailModel {
     var posterPath: URL? {
         guard let url = URL(string: "https://image.tmdb.org/t/p/w500\(poster_path ?? "")") else { return nil }
@@ -40,6 +52,20 @@ extension MovieDetailModel {
     }
     var backdropPath: URL? {
         guard let url = URL(string: "https://image.tmdb.org/t/p/original\(backdrop_path ?? "")") else { return nil }
+        return url
+    }
+}
+
+extension ProductionCompany {
+    var logoPath: URL? {
+        guard let url = URL(string: "https://image.tmdb.org/t/p/w200\(logo_path ?? "")") else { return nil }
+        return url
+    }
+}
+
+extension MovieCast {
+    var profilePath: URL? {
+        guard let url = URL(string: "https://image.tmdb.org/t/p/w500\(profile_path ?? "")") else { return nil }
         return url
     }
 }
