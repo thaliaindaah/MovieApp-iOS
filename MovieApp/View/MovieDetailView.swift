@@ -19,11 +19,20 @@ struct MovieDetailView: View {
             } else if let detail = presenter.movieDetail {
                 ScrollView(showsIndicators: false) {
                     VStack(spacing:0){
-                        WebImage(url: detail.posterPath)
-                            .resizable()
-                            .frame(height: 350)
-                            .frame(maxWidth: .infinity)
-                            .clipped()
+                        WebImage(url: detail.posterPath) { image in
+                            image
+                                .resizable()
+                        } placeholder: {
+                            ZStack {
+                                Color(Color.gray.opacity(0.15))
+                                Image(systemName: "film")
+                                    .font(.system(size: 80))
+                                    .foregroundStyle(.gray)
+                            }
+                        }
+                        .frame(height: 350)
+                        .frame(maxWidth: .infinity)
+                        .clipped()
                         VStack(alignment: .leading, spacing: 12) {
                             Text(detail.title)
                                 .font(.title)
@@ -45,7 +54,7 @@ struct MovieDetailView: View {
                             HStack(spacing: 6) {
                                 Image(systemName: "star.fill")
                                     .foregroundStyle(.yellow)
-                                Text("\(String(format: "%.1f", detail.vote_average)) / 10")
+                                Text("\(String(format: "%.1f", detail.vote_average))")
                                 Text("(\(detail.vote_count) Votes)")
                                     .foregroundStyle(.gray)
                             }
@@ -104,8 +113,52 @@ struct MovieDetailView: View {
                             Text("Production")
                                 .font(.headline)
                             Text("\(detail.production_companies.map{$0.name}.joined(separator: ", "))")
+                            Divider()
                         }
                         .padding()
+                        VStack(alignment: .leading, spacing: 12) {
+                            Text("Cast")
+                                .font(.headline)
+                                .padding(.horizontal)
+                            ScrollView (.horizontal, showsIndicators: false) {
+                                LazyHStack(spacing: 20) {
+                                    if let credit = presenter.credit {
+                                        ForEach(credit.cast) { cast in
+                                            VStack(spacing: 8) {
+                                                WebImage(url: cast.profilePath) { image in
+                                                    image
+                                                        .resizable()
+                                                        .scaledToFill()
+                                                } placeholder: {
+                                                    ZStack {
+                                                        Color(.systemGray6)
+                                                        Image(systemName: "person.fill")
+                                                            .font(.title)
+                                                            .foregroundStyle(.gray)
+                                                    }
+                                                }
+                                                .frame(width: 70, height: 70)
+                                                .clipShape(.circle)
+                                                VStack(spacing: 2) {
+                                                    Text(cast.name)
+                                                        .font(.caption)
+                                                        .fontWeight(.semibold)
+                                                        .multilineTextAlignment(.center)
+                                                        .lineLimit(1)
+                                                    Text(cast.character)
+                                                        .font(.caption2)
+                                                        .foregroundStyle(.secondary)
+                                                        .multilineTextAlignment(.center)
+                                                        .lineLimit(1)
+                                                }
+                                                .frame(width: 80)
+                                            }
+                                        }
+                                    }
+                                }
+                                .padding(.horizontal)
+                            }
+                        }
                     }
                 }
                 .ignoresSafeArea(edges: .top)
@@ -120,8 +173,8 @@ struct MovieDetailView: View {
             }
         }
         .task {
-            presenter.getMovieDetail()
-            presenter.getVideoTrailer()
+            presenter.loadMovieDetail()
         }
     }
 }
+
