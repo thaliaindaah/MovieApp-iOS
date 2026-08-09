@@ -14,6 +14,7 @@ protocol MovieRepositoryProtocol {
     func fetchMoviesDetail(id: Int) -> AnyPublisher<MovieDetailModel, Error>
     func fetchVideo(movieId: Int) -> AnyPublisher<[VideoModel], Error>
     func fetchReview(page: Int, movieId: Int) -> AnyPublisher<ReviewResponse, Error>
+    func fetchCast(movieId: Int) -> AnyPublisher<MovieCredit, Error>
 }
 
 final class MovieRepository: MovieRepositoryProtocol {
@@ -81,4 +82,17 @@ final class MovieRepository: MovieRepositoryProtocol {
         }
         .eraseToAnyPublisher()
     }
+    
+    func fetchCast(movieId: Int) -> AnyPublisher<MovieCredit, any Error> {
+        apiClient.request(
+            "/movie/\(movieId)/credits",
+            parameters: [
+                "language": "en-US"
+            ]
+        ).map { (response: MovieCredit) in
+            response
+        }
+        .eraseToAnyPublisher()
+    }
+    
 }
