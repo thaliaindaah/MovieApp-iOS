@@ -12,6 +12,7 @@ protocol MovieInteractorProtocol {
     func fetchMoviesDetail(id: Int) -> AnyPublisher<MovieDetailModel, Error>
     func fetchVideoTrailer(movidId: Int) -> AnyPublisher<[VideoModel], Error>
     func fetchReview(page: Int, movidId: Int) -> AnyPublisher<ReviewResponse, Error>
+    func fetchCast(movieId: Int) -> AnyPublisher<MovieCredit, Error>
 }
 
 final class MovieInteractor: MovieInteractorProtocol {
@@ -35,6 +36,10 @@ final class MovieInteractor: MovieInteractorProtocol {
     
     func fetchReview(page: Int, movidId: Int) -> AnyPublisher<ReviewResponse, any Error> {
         repository.fetchReview(page: page, movieId: movidId)
+    }
+    
+    func fetchCast(movieId: Int) -> AnyPublisher<MovieCredit, any Error> {
+        repository.fetchCast(movieId: movieId)
     }
 }
 
